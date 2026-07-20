@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".controller.Meal_list">
+
+
+    <ImageView
+        android:id="@+id/btn_menu"
+        android:layout_width="28dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/ic_menu"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Yummy Plan"
+        android:textColor="#1A7541"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/btn_menu"
+        app:layout_constraintTop_toTopOf="@id/btn_menu" />
+
+
+    <TextView
+            android:id="@+id/tv_explore_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Explore Meals"
+            android:textColor="#1a1a1a"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_menu" />
+
+        <TextView
+            android:id="@+id/tv_explore_des"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Manage your curated list of healthy recipes."
+            android:textColor="#6A7972"
+            android:textSize="14sp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_explore_title" />
+
+    <HorizontalScrollView
+        android:id="@+id/hsv_chips"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:scrollbars="none"
+        android:overScrollMode="never"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_explore_des">
+
+        <LinearLayout
+            android:id="@+id/ll_chips_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp">
+
+            <TextView
+                android:id="@+id/tv_chip_general"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="⚪ General (None)"
+                android:textColor="#555555"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_chip"
+                android:backgroundTint="#F5F5F5" />
+
+            <TextView
+                android:id="@+id/tv_chip_vegetarian"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🟢 Vegetarian"
+                android:textColor="#1A7541"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_chip"
+                android:backgroundTint="#E8F5E9" />
+
+            <TextView
+                android:id="@+id/tv_chip_vegan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🟠 Vegan"
+                android:textColor="#E65100"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_chip"
+                android:backgroundTint="#FFE0B2" />
+
+            <TextView
+                android:id="@+id/tv_chip_high_protein"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🔵 High-Protein"
+                android:textColor="#0D47A1"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_chip"
+                android:backgroundTint="#E3F2FD" />
+
+            <TextView
+                android:id="@+id/tv_chip_low_carb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🔴 Low Carb"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:textColor="#C62828"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_chip"
+                android:backgroundTint="#FFEBEE" />
+
+            <TextView
+                android:id="@+id/tv_chip_keto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🟤 Keto"
+                android:clickable="true"
+                android:focusable="true"
+                android:textColor="#4E342E"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_chip"
+                android:backgroundTint="#EFEBE9" />
+
+            <TextView
+                android:id="@+id/tv_chip_gluten_free"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🟣 Gluten-Free"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:textColor="#6A1B9A"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:background="@drawable/bg_chip"
+                android:backgroundTint="#F3E5F5" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_explore_meals"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/hsv_chips"
+            app:layout_constraintBottom_toTopOf="@id/bottom_bar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:listitem="@layout/item_explore_meal" />
+
+
+    <LinearLayout
+        android:id="@+id/bottom_bar"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="4dp"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_home"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Home"
+            android:textColor="#666666"
+            android:textSize="12sp"
+            android:textAllCaps="false"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            app:icon="@drawable/ic_home"
+            app:iconSize="20dp"
+            app:iconTint="#666666"
+            app:iconGravity="top"
+            app:backgroundTint="@color/white"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_meals"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Meals"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:textAllCaps="false"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            app:icon="@drawable/ic_meal"
+            app:iconSize="22dp"
+            app:iconTint="#FFFFFF"
+            app:iconGravity="top"
+            app:backgroundTint="#27ae60"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_profile"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Profile"
+            android:textColor="#666666"
+            android:textSize="12sp"
+            android:textAllCaps="false"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            app:icon="@drawable/ic_person"
+            app:iconSize="22dp"
+            app:iconTint="#666666"
+            app:iconGravity="top"
+            app:backgroundTint="#FFFFFF"
+            />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

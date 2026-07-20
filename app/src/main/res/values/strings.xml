@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">YummyPlan</string>
+
+    <!-- مصفوفة التصنيفات -->
+    <string-array name="meal_categories">
+        <item>Breakfast</item>
+        <item>Lunch</item>
+        <item>Dinner</item>
+        <item>Snacks</item>
+        <item>Desserts</item>
+    </string-array>
+
+    <!-- مصفوفة أنواع الدايت  -->
+    <string-array name="diet_types">
+        <item>General (None)</item>
+        <item>Keto</item>
+        <item>Vegan</item>
+        <item>Vegetarian</item>
+        <item>High Protein</item>
+        <item>Low Carb</item>
+        <item>Gluten-Free</item>
+    </string-array>
+</resources>

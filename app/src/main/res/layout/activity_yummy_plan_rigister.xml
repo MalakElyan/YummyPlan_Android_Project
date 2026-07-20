@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".controller.YummyPlan_Rigister">
+
+    <ImageView
+        android:id="@+id/img_logo"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/yummy_logo"
+        android:scaleType="centerCrop"
+        android:layout_margin="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/tv_app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Yummy Plan"
+        android:textColor="#1A7541"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/img_logo"
+        app:layout_constraintStart_toEndOf="@id/img_logo"
+        app:layout_constraintTop_toTopOf="@id/img_logo" />
+
+
+    <TextView
+        android:id="@+id/tv_signin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sign In"
+        android:textColor="#292929"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintBottom_toBottomOf="@id/img_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/img_logo" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/img_logo"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_register_form"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="#ffffff"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginHorizontal="20dp"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="24dp">
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Join the Yummy"
+                android:textColor="#1a1a1a"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_sub_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="Create your plan for a healthier lifestyle today."
+                android:textColor="#666666"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+            <LinearLayout
+                android:id="@+id/toggle_group_role"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="32dp"
+                android:layout_marginTop="24dp"
+                android:gravity="center_vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_sub_title">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_regular"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Regular User"
+                    android:textColor="#FFFFFF"
+                    android:textAllCaps="false"
+                    app:backgroundTint="#27ae60"
+                    android:padding="8dp"
+                    />
+
+                <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_admin"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Admin"
+                android:textColor="#666666"
+                android:textAllCaps="false"
+                app:backgroundTint="#F1F1F1" />
+            </LinearLayout>
+
+
+            <EditText
+                android:id="@+id/et_full_name"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/edit_text_style"
+                android:hint="Full Name"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:drawableStart="@drawable/ic_person"
+                android:drawablePadding="10dp"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/toggle_group_role"/>
+
+            <EditText
+                android:id="@+id/et_email"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/edit_text_style"
+                android:hint="Email Address"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:drawableStart="@drawable/ic_email"
+                android:drawablePadding="10dp"
+                android:inputType="textEmailAddress"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/et_full_name"/>
+
+            <EditText
+                android:id="@+id/et_password"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/edit_text_style"
+                android:hint="Crteate Password"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:drawableStart="@drawable/ic_lock_password"
+                android:drawablePadding="10dp"
+                android:inputType="textPassword"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/et_email"/>
+
+            <EditText
+                android:id="@+id/et_birth_date"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/edit_text_style"
+                android:hint="Birth Date"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:drawableStart="@drawable/ic_date"
+                android:drawablePadding="10dp"
+                android:inputType="date"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/et_password"/>
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_signup"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_marginTop="24dp"
+                android:text="Sign Up"
+                android:textAllCaps="false"
+                android:textSize="20sp"
+                app:backgroundTint="#27ae60"
+                app:cornerRadius="10dp"
+                app:icon="@drawable/ic_arrow"
+                app:iconSize="28dp"
+                app:iconGravity="textEnd"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/et_birth_date" />
+
+            <TextView
+                android:id="@+id/tv_or_join"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:letterSpacing="0.1"
+                android:text="OR JOIN WITH"
+                android:textColor="#999999"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btn_signup" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_or_join">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_google"
+                    android:layout_width="0dp"
+                    android:layout_height="55dp"
+                    android:text="Google"
+                    android:textColor="#1a1a1a"
+                    android:textAllCaps="false"
+                    app:backgroundTint="#F4F4F4"
+                    app:strokeColor="#B1B0B0"
+                    app:strokeWidth="1dp"
+                    app:cornerRadius="10dp"
+                    app:icon="@drawable/ic_google_rgb"
+                    app:iconGravity="textStart"
+                    app:iconTint="@null"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_apple"
+                    android:layout_width="0dp"
+                    android:layout_height="55dp"
+                    android:text="Apple"
+                    android:textColor="#1a1a1a"
+                    android:textAllCaps="false"
+                    app:backgroundTint="#F4F4F4"
+                    app:strokeColor="#B1B0B0"
+                    app:strokeWidth="1dp"
+                    app:cornerRadius="10dp"
+                    app:icon="@drawable/ic_apple"
+                    app:iconGravity="textStart"
+                    app:iconTint="@null"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
