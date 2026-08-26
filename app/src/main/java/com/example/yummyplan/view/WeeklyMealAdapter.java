@@ -36,7 +36,7 @@ public class WeeklyMealAdapter extends RecyclerView.Adapter<WeeklyMealAdapter.Me
     @NonNull
     @Override
     public WeeklyMealAdapter.MealViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.item_weekly_meal, parent, false);
+        View v = LayoutInflater.from(context).inflate(R.layout.item_weekly_meal,parent,false);
         MealViewHolder mvh = new MealViewHolder(v);
         return mvh;
     }
@@ -102,7 +102,7 @@ public class WeeklyMealAdapter extends RecyclerView.Adapter<WeeklyMealAdapter.Me
         return meals.size();
     }
 
-    // هان بعمل تعريف وانفلاتينق لعناصر الريسايكل فيو الي في ال xml
+    // هان بعمل تعريف لعناصر الريسايكل فيو الي في ال xml
     public class MealViewHolder extends RecyclerView.ViewHolder {
 
         ImageView img_meal_image, img_delete;

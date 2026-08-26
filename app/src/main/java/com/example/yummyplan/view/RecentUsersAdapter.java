@@ -33,7 +33,7 @@ public class RecentUsersAdapter extends RecyclerView.Adapter<RecentUsersAdapter.
     @Override
     public RecentUsersAdapter.RecentUserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // هاد بعمل انفلاتنق للitem تبع الريسايكل يعني زي كأنه ببني الشاشة وبعدها بخزنها في فيو
-        View v = LayoutInflater.from(context).inflate(R.layout.item_recent_user, parent, false);
+        View v = LayoutInflater.from(context).inflate(R.layout.item_recent_user, parent,false);
         //بعدها ببعت الفيو هاد للRecentUserViewHolder عشان يمسك العناصر الي بدي اعبيها او اتعامل معها بالزبط
         RecentUserViewHolder recent_holder = new RecentUserViewHolder(v);
         return recent_holder;
@@ -62,7 +62,7 @@ public class RecentUsersAdapter extends RecyclerView.Adapter<RecentUsersAdapter.
         return recent_user_list.size();
     }
 
-    // هاد كلاس مساعد بياخد وبركزلي عالحقول الي انا محدداها تحت بحيث كل لفة على item التطبيق من كل الواجهة بش بضوف هدول الحقلين وهيك بقراهم وبعدلهم بسرعة
+    // هاد كلاس مساعد بركزلي عالحقول الي انا محدداها تحت بحيث كل لفة على item التطبيق من كل الواجهة بشوف هدول الحقلين وهيك بقراهم وبعدلهم بسرعة
     public static class RecentUserViewHolder extends RecyclerView.ViewHolder {
         TextView tv_name, tv_email;
         ImageView img_user;

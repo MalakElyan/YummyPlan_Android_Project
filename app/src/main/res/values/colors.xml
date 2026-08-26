@@ -7,4 +7,8 @@
     <color name="primary_green">#1A7541</color>
     <color name="light_gray">#F1F1F1</color>
     <color name="dark_gray">#666666</color>
+
+    <color name="chip_bg_default">#D7D7D7</color>
+    <color name="chip_text_default">#1a1a1a</color>
+    <color name="chip_bg_selected">#27ae60</color>
 </resources>

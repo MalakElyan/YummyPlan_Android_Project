@@ -46,11 +46,12 @@ public class Profile extends AppCompatActivity {
         db_helper = new DatabaseHelper(this);
 
         if (savedInstanceState != null) {
-            selectedImagePath = savedInstanceState.getString("temp_image_path", "");
+            // بنجيب القيمة أول شي وبنخزنها في متغير
+            selectedImagePath = savedInstanceState.getString("saved_image_path", "");
+            // الان بنفحص المتغير لان خلص تعبى بالبيانات
             if (!selectedImagePath.isEmpty()) {
                 Uri imageUri = Uri.parse(selectedImagePath);
                 binding.imgProfilepicture.setImageURI(imageUri);
-                binding.imgAvtarPicture.setImageURI(imageUri);
             }
         }
 
@@ -61,7 +62,7 @@ public class Profile extends AppCompatActivity {
 
         loadUserData();
 
-        // بجيب الصورة عند الضغط على القلم عن صورة البروفايل
+        // بجيب الصورة عند الضغط على قلم صورة البروفايل
         binding.cardEditprofile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,8 +75,7 @@ public class Profile extends AppCompatActivity {
                 View alertView = inflater.inflate(R.layout.dialog_select_photo, null);
                 builder.setView(alertView);
 
-
-                final AlertDialog alertDialog = builder.create();
+                AlertDialog alertDialog = builder.create();
                 View llCamera = alertView.findViewById(R.id.ll_choose_camera);
                 View llGallery = alertView.findViewById(R.id.ll_choose_gallery);
 
@@ -93,7 +93,9 @@ public class Profile extends AppCompatActivity {
                 llGallery.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        // فتح معرض الملفات والصور باستخدام مستندات وليس ACTION_PICK عشان يمنح التطبيق صلاحية وصول دائمة للصور
                         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                        // هان بنعمل تصفية للملفات وبيعرض بس الصور القابلة للفتح والقراءة
                         intent.addCategory(Intent.CATEGORY_OPENABLE);
                         intent.setType("image/*");
                         launcherGallery.launch(intent);
@@ -150,7 +152,6 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Profile.this, Meal_list.class);
-                intent.putExtra("user_role", userRole);
                 startActivity(intent);
                 finish();
             }
@@ -169,7 +170,6 @@ public class Profile extends AppCompatActivity {
             if (currentUser.getUser_img() != null && !currentUser.getUser_img().isEmpty()) {
                 Uri imageUri = Uri.parse(currentUser.getUser_img());
                 binding.imgProfilepicture.setImageURI(imageUri);
-                binding.imgAvtarPicture.setImageURI(imageUri);
                 }
             }
         }
@@ -194,7 +194,7 @@ public class Profile extends AppCompatActivity {
             currentUser.setUser_img(selectedImagePath);
         }
 
-        //هان بشوف اذا ما غير الباسوورد بخلي القديم اذا غيره بتحدث تحت
+        //هان بشوف اذا ما غير الباسوورد بخلي القديم اذا غيره بتحدث
         if (!newPassword.isEmpty()) {
             currentUser.setPassword(newPassword);
         }
@@ -206,14 +206,11 @@ public class Profile extends AppCompatActivity {
             // هان بفضي الباسوورد بعد الجفظ
             binding.etPassword.setText("");
             selectedImagePath = "";
-            Toast.makeText(this, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Failed to update profile!", Toast.LENGTH_SHORT).show();
         }
     }
 
     //ARL للمعرض
-    private final ActivityResultLauncher<Intent> launcherGallery = registerForActivityResult(
+    ActivityResultLauncher<Intent> launcherGallery = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
@@ -222,9 +219,8 @@ public class Profile extends AppCompatActivity {
                         Uri uri = result.getData().getData();
                         if (uri != null) {
                             binding.imgProfilepicture.setImageURI(uri);
-                            binding.imgAvtarPicture.setImageURI(uri);
 
-                            // هان بنطلب من نظام الأندرويد صلاحية قراءة دائمة لرابط الصورة
+                            // هان بنطلب من نظام الأندرويد صلاحية قراءة دائمة لرابط الصورة عشان ما يرجعلي صورة الأندرويد الافتراضية
                             try {
                                 getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
                             } catch (SecurityException e) {
@@ -239,7 +235,7 @@ public class Profile extends AppCompatActivity {
     );
 
     // ARL الكاميرا
-    private final ActivityResultLauncher<Intent> launcherCamera = registerForActivityResult(
+    ActivityResultLauncher<Intent> launcherCamera = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
@@ -249,15 +245,14 @@ public class Profile extends AppCompatActivity {
                         if (b != null) {
                             Bitmap bitmap = (Bitmap) b.get("data");
                             binding.imgProfilepicture.setImageBitmap(bitmap);
-                            binding.imgAvtarPicture.setImageBitmap(bitmap);
 
                             try {
-                                //بننشئ ملف فارغ باسم فريد من نوعه بداخل الكاش تبعت التطبيق
-                                File file = new File(getCacheDir(), "meal_cam_" + System.currentTimeMillis() + ".jpg");
-                                // بفتح طريق عشان اكتب في هاد الملف
+                                //بننشئ ملف فارغ باسم فريد من نوعه meal_cam_123654897215648.webp بداخل الكاش تبعت التطبيق
+                                File file = new File(getCacheDir(), "meal_cam_" + System.currentTimeMillis() + ".webp");
+                                // بفتح طريق عشان اكتب بايتات الصورة في هاد الملف
                                 FileOutputStream out = new FileOutputStream(file);
                                 //  بنضغط الـ Bitmap وبنحفظه داخل الملف
-                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                                bitmap.compress(Bitmap.CompressFormat.WEBP, 100, out);
                                 out.close();
                                 // بنحول الملف لuri ثم لنص عشان نحفظه في قاعدة البيانات
                                 selectedImagePath = Uri.fromFile(file).toString();
@@ -273,8 +268,8 @@ public class Profile extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        // بنحفظ مسار الصورة المختارة حالياً والي لسا ما انحفظ في الداتابيز
-        outState.putString("temp_image_path", selectedImagePath);
+        // بنحفظ مسار الصورة المختارة حالياً والي لسا ما انحفظ في الداتابيز عشان التدوير
+        outState.putString("saved_image_path", selectedImagePath);
     }
 
 }

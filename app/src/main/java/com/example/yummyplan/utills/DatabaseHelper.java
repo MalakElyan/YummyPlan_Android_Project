@@ -15,7 +15,7 @@ import com.example.yummyplan.model.User;
 import java.util.ArrayList;
 import java.util.List;
 
-// هاد الكلاس هو الي بتعامل من خلاله مع الداتا بيز وبكتب فيه كل العمليات الي بدب اياها من الداتا بيز يعني هو كلاس واحد لكل البرنامج مش زي الأدابتر بتكرر لكل ريسايكل فيو
+// هاد الكلاس هو الي بتعامل من خلاله مع الداتا بيز وبكتب فيه كل العمليات الي بدي اياها من الداتا بيز يعني هو كلاس واحد لكل البرنامج مش زي الأدابتر بتكرر لكل ريسايكل فيو
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String db_name = "YummyPlan.db";
@@ -62,6 +62,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+        // هان بتحذف كلشي
         String query = "DROP TABLE IF EXISTS " + user_table;
         sqLiteDatabase.execSQL(query);
 
@@ -74,6 +75,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String queryWeeklyPlan = "DROP TABLE IF EXISTS " + weekly_plan_table;
         sqLiteDatabase.execSQL(queryWeeklyPlan);
 
+        // هان بترجع تبني كلشي
         onCreate(sqLiteDatabase);
     }
 
@@ -109,6 +111,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor c = db.rawQuery("SELECT * FROM " + user_table + " WHERE EMAIL = ? AND PASSWORD = ?", new String[]{email, password});
 
         User user = null;
+        // هاد معناها حرك المؤشر عند اول صف نتيجة طلع من الاستعلام
         if (c.moveToNext()) {
             //  عملت مؤشر عشان يأشرلي عالقيم الي بدي اياها وكل مؤشر بعطيهى رقم وبقله يأشر على عشان يخزنلي اياها في اوبجكت
             int id = c.getInt(0);
@@ -132,14 +135,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // استعلام بجيب الباسوورد بناءً على الإيميل
         Cursor cursor = db.rawQuery(" SELECT PASSWORD FROM "+ user_table +" WHERE EMAIL = ?", new String[]{email});
-
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
+         if (cursor.moveToFirst()) {
                 password = cursor.getString(0);
             }
-            cursor.close();
-        }
-        return password;
+
+         cursor.close();
+         return password;
     }
 
     // دالة حساب عدد المستخدمين الي بستخدموا التطبيق
@@ -182,6 +183,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // هاد تشيك عشان تروح لأول صف وتشوف هل في جواته بيانات
         if (cursor.moveToFirst()) {
+            //هان حلقة لان هاخد كذا نتيجة فبدي حلقة تمر عليهم
             do {
                 //هان بجيب القيم عن طريق المؤشر
                 int id = cursor.getInt(0);
@@ -225,7 +227,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return all_users_list;
     }
 
-    // دالة بتجيبلي بيانات مستخدم عن طريق ال Id تبعه عشان أعرض بياناته في البروفايل تبعه
+    // دالة بتجيبلي بيانات مستخدم عن طريق ال Id تبعه عشان أعرض بياناته في البروفايل تبعه او اخد بعض بياناته لاعرشها في شاشات تانية
     public User getUserById(int userId) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery("SELECT * FROM " + user_table + " WHERE ID = ?", new String[]{String.valueOf(userId)});
@@ -258,7 +260,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put("ROLE", user.getRole());
         cv.put("USER_IMG", user.getUser_img());
 
-        //عملنا مصفوفة هان لأن لغة جافا ودالة الupdate بيجبرونا على انه نمرر قيم الشروط داخل مصفوفة نصوص ليييييش؟!! لأن أحيانا ممكن يكون عندي كذا شرط فالمصفوفة بتسهلي أستقبل عدد من الشروط وهان عملت تحويل من رقم لنص لأن المصفوفة ما بتقبل الا نصوص
+        //عملنا مصفوفة هان لأن لغة جافا ودالة الupdate بيجبرونا على انه نمرر قيم الشروط داخل مصفوفة نصوص ليييييش؟!!
+        // لأن أحيانا ممكن يكون عندي كذا شرط فالمصفوفة بتسهلي أستقبل عدد من الشروط وهان عملت تحويل من رقم لنص لأن المصفوفة ما بتقبل الا نصوص
         int result = db.update(user_table, cv, "ID = ?", new String[]{String.valueOf(user.getId())});
         if (result > 0) {
             Toast.makeText(context, "Profile Updated Successfully", Toast.LENGTH_SHORT).show();
@@ -382,7 +385,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                // قراءة البيانات من المؤشر
+                // بنقرأ البيانات من المؤشر
                 int id = cursor.getInt(0);
                 String title = cursor.getString(1);
                 String category = cursor.getString(2);
@@ -547,6 +550,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Toast.makeText(context, "Remove Failed", Toast.LENGTH_SHORT).show();
             return false;
         }
+    }
+
+    // دالة حذف الخطة الأسبوعية كاملة لمستخدم معين
+    public boolean clearFullWeeklyPlan(int userId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int result = db.delete(weekly_plan_table, "USER_ID = ?", new String[]{String.valueOf(userId)});
+        if (result > 0) {
+            Toast.makeText(context, "Weekly Plan Cleared", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return false;
     }
 
 }

@@ -49,7 +49,6 @@ public class Admin_Dashboard extends AppCompatActivity {
         adapter = new RecentUsersAdapter(this, recentList);
         LinearLayoutManager lm = new LinearLayoutManager(this);
         rv_RecentUsers.setLayoutManager(lm);
-
         rv_RecentUsers.setAdapter(adapter);
 
 
@@ -78,7 +77,6 @@ public class Admin_Dashboard extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Admin_Dashboard.this, Meal_list.class);
-                intent.putExtra("user_role", "admin");
                 startActivity(intent);
             }
         });

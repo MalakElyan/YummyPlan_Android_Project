@@ -1,8 +1,11 @@
 package com.example.yummyplan.view;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,8 +44,8 @@ public class ExploreMealsAdapter extends RecyclerView.Adapter<ExploreMealsAdapte
     @NonNull
     @Override
     public ExploreMealsAdapter.MealViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // هاد بتحول ملف الxml من كود لview جاهزة للعرض
-        View v = LayoutInflater.from(context).inflate(R.layout.item_explore_meal, parent, false);
+        // هاد بتحول ملف الxml من كود لview
+        View v = LayoutInflater.from(context).inflate(R.layout.item_explore_meal, parent,false);
         // هان بياخد العناصر من ال viewholder وبركبها عالفيو
         MealViewHolder mvh = new MealViewHolder(v);
         return mvh;    }
@@ -108,14 +111,14 @@ public class ExploreMealsAdapter extends RecyclerView.Adapter<ExploreMealsAdapte
                                 DatabaseHelper db_helper = new DatabaseHelper(context);
 
                                 boolean isDeleted = db_helper.deleteMeal(m.getId());
-
+                                // هاد بينقرأ هيك if (isDeleted == true)
                                 if (isDeleted) {
                                     // بنجيب مكان العنصر بالزبط من الريسايكل فيو
                                     int currentPosition = holder.getAdapterPosition();
                                     meals.remove(currentPosition);
 
                                     notifyItemRemoved(currentPosition);
-                                    //هاد لاعادة ترتيب العناصر في الريسايكل فيو عشان ما يصر كراش
+                                    //من  هاد لاعادة ترتيب العناصر في الريسايكل فيو عشان ما يصير كراش من عند هاد العنصر لنهاية القائمة مش كل القائمة
                                     notifyItemRangeChanged(currentPosition, meals.size());
                                 }
                             }
@@ -137,6 +140,7 @@ public class ExploreMealsAdapter extends RecyclerView.Adapter<ExploreMealsAdapte
             }
         });
 
+        //هان لما اضغط على الكارد ككل عشان تنقلني للتفاصيل
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -206,20 +210,15 @@ public class ExploreMealsAdapter extends RecyclerView.Adapter<ExploreMealsAdapte
                 String selectedDay = spinnerDays.getSelectedItem().toString();
                 String selectedCategory = spinnerCategories.getSelectedItem().toString();
 
-                android.content.SharedPreferences preferences = context.getSharedPreferences("UserSession", Context.MODE_PRIVATE);
+                SharedPreferences preferences = context.getSharedPreferences("UserSession", MODE_PRIVATE);
                 int userId = preferences.getInt("user_id", -1);
 
-                //هان بروح لقاعدة البيانات عشان بعمل اوبجكت من الهلبر عشان يوصلني لعملية الاضافة
+                // بعمل اوبجكت من الهلبر عشان يوصلني لعملية الاضافة الي في الهلبر
                 DatabaseHelper db_helper = new DatabaseHelper(context);
 
                 //بستدعي دالة الحفظ وبمررلها البيانات
-                boolean isInserted = db_helper.insertToPlan(userId, meal.getId(), selectedDay, selectedCategory);
+                db_helper.insertToPlan(userId, meal.getId(), selectedDay, selectedCategory);
 
-                if (isInserted) {
-                    Toast.makeText(context, " Added to your weekly plan!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(context, " Failed to add to plan", Toast.LENGTH_SHORT).show();
-                }
             }
         });
         // زر ال no

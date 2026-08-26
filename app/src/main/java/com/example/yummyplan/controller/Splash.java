@@ -1,6 +1,7 @@
 package com.example.yummyplan.controller;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -29,11 +30,28 @@ public class Splash extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(Splash.this, YummyPlan_Rigister.class);
+                // هان بفحص هل المستخدم مسجل دخول ولا لا من الشيرد طبعا
+                SharedPreferences preferences = getSharedPreferences("UserSession", MODE_PRIVATE);
+                boolean isLoggedIn = preferences.getBoolean("is_logged_in", false);
+                String role = preferences.getString("user_role", "user");
+
+                Intent intent;
+
+                if (isLoggedIn) {
+                    // إذا كان مسجل دخول بنروح للداشبورد تبعته مباشرة
+                    if (role.equals("admin")) {
+                        intent = new Intent(Splash.this, Admin_Dashboard.class);
+                    } else {
+                        intent = new Intent(Splash.this, User_dashboard.class);
+                    }
+                } else {
+                    // إذا كان مستخدم جديد بنروح للرجستر
+                    intent = new Intent(Splash.this, YummyPlan_Rigister.class);
+                }
+
                 startActivity(intent);
                 finish();
             }
-        }, 3000);
+        }, 1500);
     }
-
 }

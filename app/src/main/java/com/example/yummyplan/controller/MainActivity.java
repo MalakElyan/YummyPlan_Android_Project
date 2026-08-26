@@ -32,8 +32,8 @@ public class MainActivity extends AppCompatActivity {
         editor = preferences.edit();
 
 
-        // هدول عشان لو طلع من الببرنامج ورجع وكان معبي حقول يرجع يلاقيها معبية
-        binding.etEmail.setText(preferences.getString("username", ""));
+        // هدول عشان لو طلع من البرنامج ورجع وكان معبي حقول يرجع يلاقيها معبية
+        binding.etEmail.setText(preferences.getString("saved_email", ""));
         binding.cbRemember.setChecked(preferences.getBoolean("remember_state", false));
 
         // هان انتقال عادي لو ضغطت على نص الregister
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
-                //  ًاستعلام من الداتابيز عشان نعرف هل الإيميل موجود أصلا
+                // استعلام من الداتابيز عشان نعرف هل الإيميل موجود أصلا
                 String correctPassword = db_helper.getPasswordByEmail(email);
 
                 if (correctPassword == null) {
@@ -76,16 +76,15 @@ public class MainActivity extends AppCompatActivity {
                 } else if (correctPassword.equals(password)) {
                     // هان استدعينا دالة التحقق الي كتبناها في الهلبر عشان بدنا نتحقققققق
                     User logged_in_user = db_helper.checkUserLogin(email, password);
-                    // هاد فحص هل لقينا مستخدم بياناته مطابقة لهاد ولا لا
                     if (logged_in_user != null) {
                         // هان طب هل ضغط على تذكرني اذا اه روح يا editor احفظلي بياناته وحالة الزر كمان
                         if (binding.cbRemember.isChecked()) {
-                            editor.putString("username", email);
+                            editor.putString("saved_email", email);
                             editor.putBoolean("remember_state", true);
                             editor.apply();
                         } else {
                             // اذا ما ضغط بروح بحذف اي بيانات تخزنت لانه ما بده احفظ بياناته
-                            editor.remove("username");
+                            editor.remove("saved_email");
                             editor.putBoolean("remember_state", false);
                             editor.apply();
                         }

@@ -3,6 +3,7 @@ package com.example.yummyplan.controller;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -121,9 +122,9 @@ public class Meal_Deatails extends AppCompatActivity {
             //  هان بنجيب المكونات وبنقطعها ونعرضها في الـ RecyclerView
             String rawIngredients = meal.getIngredients();
             if (rawIngredients != null && !rawIngredients.isEmpty()) {
-                // بنقطع النص عند كل فاصلة عشان نعمل لستة بالمكونات
+                //  بنقطع النص عند كل فاصلة عشان نعمل لستة بالمكونات مع بعض
                 String[] ingredientsArray = rawIngredients.split(",");
-                //بعمل لستة جديدة عشان اخزن فيها المكونات المقصوصة
+                //بعمل لستة جديدة عشان اخزن فيها المكونات المقصوصة بشكل فردي
                 ArrayList<String> list = new ArrayList<>();
                 for (String item : ingredientsArray) {
                     list.add(item);
@@ -137,7 +138,7 @@ public class Meal_Deatails extends AppCompatActivity {
             }
         }
 
-    // هاد الديالج الي بسألني في يوم شو اضيف ولاي وجبة
+    // هاد الديالوج الي بسألني في يوم شو اضيف ولاي وجبة
     private void showAddToPlanDialog(Meal meal, String[] daysArray, String[] categoriesArray) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Add \"" + meal.getTitle() + "\" to Plan");
@@ -163,17 +164,10 @@ public class Meal_Deatails extends AppCompatActivity {
                 String selectedDay = spinnerDays.getSelectedItem().toString();
                 String selectedCategory = spinnerCategories.getSelectedItem().toString();
 
-                android.content.SharedPreferences preferences = getSharedPreferences("UserSession", Context.MODE_PRIVATE);
+                SharedPreferences preferences = getSharedPreferences("UserSession", MODE_PRIVATE);
                 int userId = preferences.getInt("user_id", -1);
+                db_helper.insertToPlan(userId, meal.getId(), selectedDay, selectedCategory);
 
-                DatabaseHelper db_helper = new DatabaseHelper(Meal_Deatails.this);
-                boolean isInserted = db_helper.insertToPlan(userId, meal.getId(), selectedDay, selectedCategory);
-
-                if (isInserted) {
-                    Toast.makeText(Meal_Deatails.this, "Added to your weekly plan!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(Meal_Deatails.this, "Failed to add to plan", Toast.LENGTH_SHORT).show();
-                }
             }
         });
 

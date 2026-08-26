@@ -1,14 +1,18 @@
 package com.example.yummyplan.controller;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.yummyplan.R;
 import com.example.yummyplan.utills.DatabaseHelper;
 import com.example.yummyplan.databinding.ActivityWeeklyPlanBinding;
 import com.example.yummyplan.model.Meal;
@@ -35,11 +39,11 @@ public class Weekly_Plan extends AppCompatActivity {
 
         db_helper = new DatabaseHelper(this);
 
-        // بنستقبل الـ id للمستخدم الحالي
+        // بنجيب الـ id للمستخدم الحالي من الشيرد
         SharedPreferences preferences = getSharedPreferences("UserSession", Context.MODE_PRIVATE);
         userId = preferences.getInt("user_id", -1);
 
-        // هاد عشان اجيب تاريخ اليوم في الجهاز
+        // هاد عشان اجيب اليوم في الجهاز
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE", Locale.ENGLISH);
         currentDayName = sdf.format(new Date());
 
@@ -58,6 +62,33 @@ public class Weekly_Plan extends AppCompatActivity {
         binding.cvThu.setOnClickListener(v -> filterMealsByDay("Thursday"));
         binding.cvFri.setOnClickListener(v -> filterMealsByDay("Friday"));
         binding.cvSat.setOnClickListener(v -> filterMealsByDay("Saturday"));
+
+        // نص حذف الخطة الاسبوعية
+        binding.tvClearWeeklyPlan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(Weekly_Plan.this);
+
+                builder.setTitle("Delete Alert");
+                builder.setMessage("Are You Sure You Want to Delete The Weakly Plan❓");
+
+                builder.setPositiveButton("✅ Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //بنستدعي دالة الحذف من قاعدة االبيانات
+                        db_helper.clearFullWeeklyPlan(userId);
+                        // بننادي دالة الفلترة عشان تمسح الوجبات من الواجهة
+                        filterMealsByDay(currentDayName);
+                        }
+                });
+
+                builder.setNegativeButton("❌ No", null);
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            }
+        });
+
+
 
         // زر العودة للخلف
         binding.imgBack.setOnClickListener(new View.OnClickListener() {
@@ -87,10 +118,6 @@ public class Weekly_Plan extends AppCompatActivity {
         // هان جيب كل وجبات هاد اليوم لهاد المستخدم من الداتابيز
         ArrayList<Meal> resultList = db_helper.getMealsByUserAndDay(userId, dayName);
 
-        // هان بنحمي اللستة إذا رجعت فارغة
-        if (resultList == null) {
-            resultList = new ArrayList<>();
-        }
 
         // لستات فرعية عشان نقسم الوجبات حسب القسم
         ArrayList<Meal> breakfastMeals = new ArrayList<>();
@@ -115,25 +142,23 @@ public class Weekly_Plan extends AppCompatActivity {
             }
         }
 
-        int defaultCardColor = android.graphics.Color.parseColor("#FFFFFF");
 
-        binding.cvSun.setCardBackgroundColor(defaultCardColor);
-        binding.cvMon.setCardBackgroundColor(defaultCardColor);
-        binding.cvTue.setCardBackgroundColor(defaultCardColor);
-        binding.cvWed.setCardBackgroundColor(defaultCardColor);
-        binding.cvThu.setCardBackgroundColor(defaultCardColor);
-        binding.cvFri.setCardBackgroundColor(defaultCardColor);
-        binding.cvSat.setCardBackgroundColor(defaultCardColor);
+        binding.cvSun.setCardBackgroundColor(Color.WHITE);
+        binding.cvMon.setCardBackgroundColor(Color.WHITE);
+        binding.cvTue.setCardBackgroundColor(Color.WHITE);
+        binding.cvWed.setCardBackgroundColor(Color.WHITE);
+        binding.cvThu.setCardBackgroundColor(Color.WHITE);
+        binding.cvFri.setCardBackgroundColor(Color.WHITE);
+        binding.cvSat.setCardBackgroundColor(Color.WHITE);
 
-        int activeColor = android.graphics.Color.parseColor("#27ae60");
         switch (dayName) {
-            case "Sunday": binding.cvSun.setCardBackgroundColor(activeColor); break;
-            case "Monday": binding.cvMon.setCardBackgroundColor(activeColor); break;
-            case "Tuesday": binding.cvTue.setCardBackgroundColor(activeColor); break;
-            case "Wednesday": binding.cvWed.setCardBackgroundColor(activeColor); break;
-            case "Thursday": binding.cvThu.setCardBackgroundColor(activeColor); break;
-            case "Friday": binding.cvFri.setCardBackgroundColor(activeColor); break;
-            case "Saturday": binding.cvSat.setCardBackgroundColor(activeColor); break;
+            case "Sunday": binding.cvSun.setCardBackgroundColor(getColor(R.color.secondary_green)); break;
+            case "Monday": binding.cvMon.setCardBackgroundColor(getColor(R.color.secondary_green)); break;
+            case "Tuesday": binding.cvTue.setCardBackgroundColor(getColor(R.color.secondary_green)); break;
+            case "Wednesday": binding.cvWed.setCardBackgroundColor(getColor(R.color.secondary_green)); break;
+            case "Thursday": binding.cvThu.setCardBackgroundColor(getColor(R.color.secondary_green)); break;
+            case "Friday": binding.cvFri.setCardBackgroundColor(getColor(R.color.secondary_green)); break;
+            case "Saturday": binding.cvSat.setCardBackgroundColor(getColor(R.color.secondary_green)); break;
         }
 
         // بنركب الأدابتر وبنمرر البيانات المفلترة بالزبط لكل ريسايكلر فيو

@@ -27,10 +27,16 @@ public class TodayMealsAdapter extends RecyclerView.Adapter<TodayMealsAdapter.Me
         this.mealsList = mealsList;
     }
 
+    // دالة جديدة لتحديث البيانات بذكاء وسرعة
+    public void updateList(ArrayList<Meal> newList) {
+        this.mealsList = newList;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public TodayMealsAdapter.MealViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_today_meal, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_today_meal, parent,false);
         MealViewHolder holder = new MealViewHolder(view);
         return holder;
     }
@@ -45,14 +51,14 @@ public class TodayMealsAdapter extends RecyclerView.Adapter<TodayMealsAdapter.Me
         holder.tv_meal_name.setText(m.getTitle());
         holder.tv_meal_category.setText(m.getCategory());
 
-        // هان بنعرض السعرات والوقت زي ما صممتيها بالظبط في الـ XML
+        // هان بنعرض السعرات والوقت زي ما صممتيها بالزبط في الـ XML
         holder.tv_meal_details.setText(m.getCalories() + " kcal  •  " + m.getCookTime() + " min");
 
         // هان بنفحص الصورة وبنعرضها، لو مش موجودة بنحط الصورة الافتراضية
         if (m.getImagePath() != null && !m.getImagePath().isEmpty()) {
             holder.img_meal_image.setImageURI(Uri.parse(m.getImagePath()));
         } else {
-            holder.img_meal_image.setImageResource(R.drawable.meal);
+            holder.img_meal_image.setImageResource(android.R.drawable.sym_def_app_icon);
         }
 
         // هان حالة التشيك بوكس الافتراضية غير محددة

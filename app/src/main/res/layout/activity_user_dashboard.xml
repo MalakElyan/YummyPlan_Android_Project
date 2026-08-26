@@ -48,6 +48,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/ic_green_person"
+            android:scaleType="centerCrop"
+
             />
     </com.google.android.material.card.MaterialCardView>
 
@@ -119,7 +121,7 @@
                     android:layout_weight="1"
                     android:layout_marginEnd="8dp"
                     app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
+                    app:cardElevation="0dp"
                     app:cardBackgroundColor="#E8F5E9">
 
                     <LinearLayout
@@ -152,7 +154,7 @@
                     android:layout_weight="1"
                     android:layout_marginStart="8dp"
                     app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
+                    app:cardElevation="0dp"
                     app:cardBackgroundColor="#FDF2E9"
                     >
 

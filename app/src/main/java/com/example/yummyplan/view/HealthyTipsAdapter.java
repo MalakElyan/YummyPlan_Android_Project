@@ -28,29 +28,29 @@ public class HealthyTipsAdapter extends RecyclerView.Adapter<HealthyTipsAdapter.
     @Override
     public HealthyTipsAdapter.TipViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // انفلاتينق للتصميم تبع بطاقة النصيحة
-        View view = LayoutInflater.from(context).inflate(R.layout.item_healthy_tip, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_healthy_tip, null);
         TipViewHolder holder = new TipViewHolder(view);
         return holder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull HealthyTipsAdapter.TipViewHolder holder, int position) {
-        // بنجيب النص كامل
-        String fullData = tipsList.get(position);
+        // بنجيب نص النصيحة الوحدة كامل
+        String fullTip = tipsList.get(position);
 
         // هان بنفصل العنوان عن الوصف باستخدام هاد //
-        if (fullData.contains("//")) {
-            String[] parts = fullData.split("//");
-            String title = parts[0].trim();
-            String description = parts[1].trim();
+        if (fullTip.contains("//")) {
+            String[] TipParts = fullTip.split("//");
+            String title = TipParts[0].trim();
+            String description = TipParts[1].trim();
 
-            // بنعبي العنوان والوصف المتغيرين
+            // بنعبي العنوان والوصف
             holder.tv_tip_title.setText(title);
             holder.tvTipDescription.setText(description);
         } else {
             // هان لو نسيت احط الفاصل يحط هاد العنوان افتراضي
             holder.tv_tip_title.setText("Healthy Tip");
-            holder.tvTipDescription.setText(fullData);
+            holder.tvTipDescription.setText(fullTip);
         }
 
         // هان الأيقونة ثابتة لكل البطاقات

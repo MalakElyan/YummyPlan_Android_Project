@@ -19,8 +19,9 @@ public class YummyPlan_Rigister extends AppCompatActivity {
 
     private ActivityYummyPlanRigisterBinding binding;
     private DatabaseHelper db_helper;
-    // هان عرفت متغير عشان يخزن داخل كأي مستخدم والافتراضي انه مستخدم عادي
+    // هان عرفت متغير عشان يخزن الدور والافتراضي انه مستخدم عادي
     private String selectedRole = "user";
+    // هاد التخزين المحلي
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
 
@@ -33,14 +34,16 @@ public class YummyPlan_Rigister extends AppCompatActivity {
         // أنشأنا نسخة للهيلبر مررنا الشاشة الحالية (Context) كإذن للوصول لملفات الذاكرة
         db_helper = new DatabaseHelper(this);
 
+        //هاد عشان لما ندور الشاشة يضل مختار وملون الزر الي ضغطت عليه
         if (savedInstanceState != null) {
             // بنجيب الدور الي انحفظ لما سجلنا
             selectedRole = savedInstanceState.getString("saved_role", "user");
         }
 
-        // هان بنفحص شو الدور ونلون الأزرار بناءً عليه عشان لو لفينا الشاشة يرجع اللون صح
+        // هان بنفحص شو الدور ونلون الأزرار بناء عليه عشان لو لفينا الشاشة يرجع اللون صح
         if (selectedRole.equals("admin")) {
-                binding.btnAdmin.setBackgroundColor(ContextCompat.getColor(YummyPlan_Rigister.this, R.color.secondary_green));
+            // استخدمنا ContextCompat لانه دالة ال get color صارت Deprecated
+            binding.btnAdmin.setBackgroundColor(ContextCompat.getColor(YummyPlan_Rigister.this, R.color.secondary_green));
                 binding.btnAdmin.setTextColor(ContextCompat.getColor(YummyPlan_Rigister.this, android.R.color.white));
 
                 binding.btnRegular.setBackgroundColor(ContextCompat.getColor(YummyPlan_Rigister.this, R.color.light_gray));
@@ -52,7 +55,7 @@ public class YummyPlan_Rigister extends AppCompatActivity {
             binding.btnAdmin.setBackgroundColor(ContextCompat.getColor(YummyPlan_Rigister.this, R.color.light_gray));
             binding.btnAdmin.setTextColor(ContextCompat.getColor(YummyPlan_Rigister.this, R.color.dark_gray));
         }
-
+        // استرجاع بيانات المسودة الي في الشيرد المود برايفت الخاص بالتطبيق تبعي
         preferences = getSharedPreferences("UserSession", MODE_PRIVATE);
         String draftName = preferences.getString("draft_name", "");
         String draftEmail = preferences.getString("draft_email", "");
@@ -64,30 +67,11 @@ public class YummyPlan_Rigister extends AppCompatActivity {
 
         editor = preferences.edit();
 
-        // هان بنفحص هل المستخدم مسجل دخول
-        boolean isLoggedIn = preferences.getBoolean("is_logged_in", false);
-
-        if (isLoggedIn) {
-            String role = preferences.getString("user_role", "user");
-            Intent intent;
-
-            // هان بنوجهه مباشرة للداشبورد المناسبة إله بدون ما يشوف شاشة الـ Login
-            if (role.equals("admin")) {
-                intent = new Intent(YummyPlan_Rigister.this, Admin_Dashboard.class);
-            } else {
-                intent = new Intent(YummyPlan_Rigister.this, User_dashboard.class);
-            }
-            startActivity(intent);
-            finish(); // بنسكر المين عشان لو ضغط رجوع ما يرجع للـ login
-            return;  // بنوقف تنفيذ باقي أسطر الدالة لأنه خلص انتقل
-        }
-
-        // هاد الأكواد هان بس عشان نغير الون الازرار لما نضغط عليههم
+        // هاد الأكواد هان بس عشان نغير اللون الازرار لما نضغط عليههم
         binding.btnRegular.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectedRole = "user";
-                // استخدمنا ContextCompat لانه دالة ال get color صارت Deprecated
                 binding.btnRegular.setBackgroundColor(ContextCompat.getColor(YummyPlan_Rigister.this, R.color.secondary_green));
                 binding.btnRegular.setTextColor(ContextCompat.getColor(YummyPlan_Rigister.this, android.R.color.white));
 
@@ -167,13 +151,14 @@ public class YummyPlan_Rigister extends AppCompatActivity {
                     binding.etBirthDate.requestFocus();
                     return;
                 }
-                // هان بجمع كل البيانات الي انكتبت فوق وبخزنها في اوبجكت واحد
+                // هان بجمع كل البيانات الي انكتبت فوق وبخزنها في اوبجكت واحد وبخزنه في قاعدة البيانات
                 User newUser = new User(fullName, email, password, birthDate, selectedRole);
                 // هان بنحفظ الاوبجكت عن طريق دالة الinsert الي كتبناها مسبقا وبحفظ النتيجة الي بترجعها الدالة في long لانها اصلا بترجع long عشان اعمل التحقق الي تحت
                 long userId = db_helper.insertUser(newUser);
 
                 if (userId != -1) {
-                    // بنمسح بيانات المسودة لأن التسجيل نجح خلص فليش تضل معروضة
+                    // بنمسح بيانات المسودة  لأن التسجيل نجح خلص فليش تضل معروضة************************************************************
+                    // هل هان يعني احذف البيانات الي حفظناها لما طلع و ما كمل تسجيل ولا كيف
                     editor.remove("draft_name");
                     editor.remove("draft_email");
                     editor.remove("draft_birth");
@@ -196,9 +181,6 @@ public class YummyPlan_Rigister extends AppCompatActivity {
                     }
                     startActivity(intent);
                     finish();
-
-                } else {
-                    Toast.makeText(YummyPlan_Rigister.this, "Registration Failed!", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -221,7 +203,7 @@ public class YummyPlan_Rigister extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        // هان بنقله إذا كانت الشاشة بتسكر نهائياً زي بعد الساين اب ما تحفظ شي
+        //هان لما يطلع المستخدم من الشاشة مؤقتا مش نهائيا بحفظ شو كتب في الحقول كمسودة في الشيرد
         if (!isFinishing()) {
             editor.putString("draft_name", binding.etFullName.getText().toString());
             editor.putString("draft_email", binding.etEmail.getText().toString());
@@ -231,7 +213,7 @@ public class YummyPlan_Rigister extends AppCompatActivity {
     }
 
 
-
+// هاد دالة حفظ البيانات عند التدوير
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);

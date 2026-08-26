@@ -51,7 +51,7 @@ public class Add_or_Edit_Meal extends AppCompatActivity {
 
         db_helper = new DatabaseHelper(this);
 
-        // هان بنفحص إذا كان في بيانات محفوظة من قبل (زي لما نلف الشاشة)
+        // هان بنفحص إذا كان في بيانات محفوظة من قبل مألف الشاشة عشان تضل معروضة عالشاشة
         if (savedInstanceState != null) {
             selectedImagePath = savedInstanceState.getString("saved_image_path");
             actionType = savedInstanceState.getString("saved_action_type");
@@ -71,33 +71,42 @@ public class Add_or_Edit_Meal extends AppCompatActivity {
 
         if (actionType != null && actionType.equals("add")) {
 
-            // هان بنبي الشيرد
+            // هان بنبني الشيرد
             preferences = getSharedPreferences("MealDraft", MODE_PRIVATE);
             editor = preferences.edit();
+            // هان غيرت اسم الصفحة و الكلام الي على الزر بناء على نوع الاجراء وهو اضافة
+            binding.tvEditMeal.setText("Add Meal");
+            binding.btnSaveChanges.setText("Add Meal");
 
-            if (actionType != null && actionType.equals("add")) {
-                binding.tvEditMeal.setText("Add Meal");
-                binding.btnSaveChanges.setText("Add Meal");
+            // هاااان بسترجع المسودة لو ضغطت على زر الرجوع بالغلط
+            if (savedInstanceState == null) {
+                binding.etMealTitle.setText(preferences.getString("draft_title", ""));
+                binding.etIngredients.setText(preferences.getString("draft_ingredients", ""));
+                binding.etInstructions.setText(preferences.getString("draft_instructions", ""));
+                binding.etCookTime.setText(preferences.getString("draft_cook", ""));
+                binding.etCalories.setText(preferences.getString("draft_calories", ""));
+                binding.etProtein.setText(preferences.getString("draft_protein", ""));
+                binding.etCarbs.setText(preferences.getString("draft_carbs", ""));
+                binding.spCategory.setSelection(preferences.getInt("draft_category", 0));
+                binding.spDietType.setSelection(preferences.getInt("draft_Diet", 0));
 
-                // هاااان بسترجع المسودة لو ضغطت على زر الرجوع بالغلط
-                if (savedInstanceState == null) {
-                    binding.etMealTitle.setText(preferences.getString("draft_title", ""));
-                    binding.etIngredients.setText(preferences.getString("draft_ingredients", ""));
-                    binding.etInstructions.setText(preferences.getString("draft_instructions", ""));
-                    binding.etCookTime.setText(preferences.getString("draft_cook", ""));
-                    binding.etCalories.setText(preferences.getString("draft_calories", ""));
-                    binding.etProtein.setText(preferences.getString("draft_protein", ""));
-                    binding.etCarbs.setText(preferences.getString("draft_carbs", ""));
+                selectedImagePath = preferences.getString("draft_image_path", "image_path");
+                if (selectedImagePath != null && !selectedImagePath.equals("image_path")) {
+                    try {
+                        binding.imgUploadImg.setImageURI(Uri.parse(selectedImagePath));
+                        binding.tvTapUpload.setVisibility(View.GONE);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
-            binding.tvEditMeal.setText("Add Meal");
-            binding.btnSaveChanges.setText("Add Meal");
+
         } else {
             binding.tvEditMeal.setText("Edit Meal");
             binding.btnSaveChanges.setText("Save Changes");
 
-            // إذا كنا في حالة تعديل والجهاز لسا ما لف بنعبي البيانات من قاعدة البيانات
+            // إذا كنا في حالة تعديل والجهاز لسا ما لف حرفيا بكن تقنيا معناها انه الشاشة تفتح لأول مرة بنعبي البيانات من قاعدة البيانات
             if (mealIdToEdit != -1 && savedInstanceState == null) {
                 fillMealDataForEdit(mealIdToEdit);
             }
@@ -120,12 +129,13 @@ public class Add_or_Edit_Meal extends AppCompatActivity {
                 builder.setCancelable(false);
 
                 // بعمل inflater عشان يعرضلي تصميمي الي عملته للتنبيه
-                LayoutInflater inflater = LayoutInflater.from(Add_or_Edit_Meal.this);
+                LayoutInflater inflater = LayoutInflater.from(getBaseContext()) ;
                 View alertView = inflater.inflate(R.layout.dialog_select_photo, null);
                 builder.setView(alertView);
 
 
-                final AlertDialog alertDialog = builder.create();
+                AlertDialog alertDialog = builder.create();
+
                 View llCamera = alertView.findViewById(R.id.ll_choose_camera);
                 View llGallery = alertView.findViewById(R.id.ll_choose_gallery);
 
@@ -143,7 +153,9 @@ public class Add_or_Edit_Meal extends AppCompatActivity {
                 llGallery.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        // فتح معرض الملفات والصور باستخدام مستندات وليس ACTION_PICK عشان يمنح التطبيق صلاحية وصول دائمة للصور
                         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                        // هان بنعمل تصفية للملفات وبيعرض بس الصور القابلة للفتح والقراءة
                         intent.addCategory(Intent.CATEGORY_OPENABLE);
                         intent.setType("image/*");
                         launcherGallery.launch(intent);
@@ -196,7 +208,9 @@ public class Add_or_Edit_Meal extends AppCompatActivity {
                     //هاد عشان يخفي نص tap to upload الي في مكان الصورة
                     binding.tvTapUpload.setVisibility(View.GONE);
                 } catch (Exception e) {
+                    //هان بطبعلي تفاصيل الخطأ في ال Logcat
                     e.printStackTrace();
+                    binding.tvTapUpload.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -205,7 +219,7 @@ public class Add_or_Edit_Meal extends AppCompatActivity {
             for (int i = 0; i < binding.spCategory.getCount(); i++) {
                 // نقارن النص الموجود في السبنر عند الموقع i بالاسم المخزن
                 if (binding.spCategory.getItemAtPosition(i).toString().equals(savedCategory)) {
-                    binding.spCategory.setSelection(i); //
+                    binding.spCategory.setSelection(i);
                     break;
                 }
             }
@@ -281,6 +295,7 @@ public class Add_or_Edit_Meal extends AppCompatActivity {
         // هان بفحص نوع العملية
         if ("add".equals(actionType)) {
             long result = db_helper.insertMeal(meal);
+            // هان بترجعلي رقم الصف Long ورقم ال index تبع الصف ببدا من 0
             if (result != -1) {
                 isMealSaved = true;
                 // بمسح المسودة لأن الوجبة انحفظت  خلص في الداتابيز
@@ -289,6 +304,7 @@ public class Add_or_Edit_Meal extends AppCompatActivity {
             }
         } else if ("edit".equals(actionType)) {
             int result = db_helper.updateMeal(meal);
+            // هان يترجعلي عدد الصفوف الي صار عليها تعديل intوالي لو صار تعديل هيكون 1 واكتر ولو ما صار هيكون 0
             if (result > 0) {
                 isMealSaved = true;
                 finish();
@@ -298,11 +314,12 @@ public class Add_or_Edit_Meal extends AppCompatActivity {
 
 
     //ARL للمعرض
-    private final ActivityResultLauncher<Intent> launcherGallery = registerForActivityResult(
+    ActivityResultLauncher<Intent> launcherGallery = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
+                    //هاد السطر بتأكد انه المستخدم اختار صورة
                     if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                         Uri uri = result.getData().getData();
                         if (uri != null) {
@@ -325,7 +342,7 @@ public class Add_or_Edit_Meal extends AppCompatActivity {
     );
 
     // ARL الكاميرا
-    private final ActivityResultLauncher<Intent> launcherCamera = registerForActivityResult(
+    ActivityResultLauncher<Intent> launcherCamera = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
@@ -338,14 +355,14 @@ public class Add_or_Edit_Meal extends AppCompatActivity {
                             //هاد عشان يخفي نص tap to upload الي في مكان الصورة
                             binding.tvTapUpload.setVisibility(View.GONE);
                             try {
-                                //بننشئ ملف فارغ باسم فريد من نوعه بداخل الكاش تبعت التطبيق
-                                File file = new File(getCacheDir(), "meal_cam_" + System.currentTimeMillis() + ".jpg");
-                                // بفتح طريق عشان اكتب في هاد الملف
+                                //بننشئ ملف فارغ باسم فريد من نوعه meal_cam_123654897215648.webp بداخل الكاش تبعت التطبيق
+                                File file = new File(getCacheDir(), "meal_cam_" + System.currentTimeMillis() + ".webp");
+                                // بفتح طريق عشان اكتب بايتات الصورة في هاد الملف
                                 FileOutputStream out = new FileOutputStream(file);
                                 //  بنضغط الـ Bitmap وبنحفظه داخل الملف
-                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                                bitmap.compress(Bitmap.CompressFormat.WEBP, 100, out);
                                 out.close();
-                                // بنحول الملف لuri ثم لنص عشان نحفظه في قاعدة البيانات
+                                // بنحول الملفfile لuri ثم لنصstring عشان نحفظه في قاعدة البيانات
                                 selectedImagePath = Uri.fromFile(file).toString();
 
                             } catch (Exception e) {
@@ -357,7 +374,7 @@ public class Add_or_Edit_Meal extends AppCompatActivity {
             });
 
     // ARL الخاص بمعرض الـ AI لاستخراج نصوص المكونات
-    private final ActivityResultLauncher<Intent> launcherOcrGallery = registerForActivityResult(
+    ActivityResultLauncher<Intent> launcherOcrGallery = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
@@ -374,27 +391,32 @@ public class Add_or_Edit_Meal extends AppCompatActivity {
 
     // دالة معالجة الصورة واستخراج النصوص أوفلاين
     private void runTextRecognitionFromUri(Uri uri) {
+        // عملت اوبجكت من نوع InputImage التابع لمكتبة ML Kit من Google وظيفته تحويل أي صورة سواء جاية من المعرض,الكاميرا,ملف لتنسيق موحد بفهمه الذكاء الاصطناعي
         InputImage image;
         try {
             image = InputImage.fromFilePath(this, uri);
+            // هان بعطيه الخيار الافتراضي للقراءة والمعالجة بدون انترنت
             TextRecognizer recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
 
             Toast.makeText(this, "Analyzing ingredients...", Toast.LENGTH_SHORT).show();
-
+            // هان ببعتله الصورة عشان يعمللها تحليل OCR
             recognizer.process(image)
+                    //ال visionText اوبجكت بترجعه المكتبة لما ينجح التحليل وفيه كل البيانات والنصوص الي استخرجهاالذكاء الاصطناعي
                     .addOnSuccessListener(visionText -> {
                         String processedText = visionText.getText();
                         if (!processedText.isEmpty()) {
-                            // بنعبي النص المقروء داخل الحقل تبع للمكونات
+                            // بنعبي النص المقروء داخل الحقل تبع المكونات
                             binding.etIngredients.setText(processedText);
                             Toast.makeText(Add_or_Edit_Meal.this, "Ingredients scanned successfully!", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(Add_or_Edit_Meal.this, "No text found in the image.", Toast.LENGTH_SHORT).show();
                         }
                     })
+                    //هان لو طلعت الصورة تالفة او ما قدر يقرا الكلام الي فيها بظهرله الرسالة هاد
                     .addOnFailureListener(e -> {
                         Toast.makeText(Add_or_Edit_Meal.this, "Failed to scan text: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
+            //   هان لما ما نلاقي ملف الصورة تبع ال uri أو ما يقدر يقرا الملف تبع الصورة لما يحول الـ uri لـ InputImage
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(this, "Failed to load image", Toast.LENGTH_SHORT).show();
@@ -425,6 +447,9 @@ public class Add_or_Edit_Meal extends AppCompatActivity {
             editor.putString("draft_calories", binding.etCalories.getText().toString());
             editor.putString("draft_protein", binding.etProtein.getText().toString());
             editor.putString("draft_carbs", binding.etCarbs.getText().toString());
+            editor.putInt("draft_category", binding.spCategory.getSelectedItemPosition());
+            editor.putInt("draft_Diet", binding.spDietType.getSelectedItemPosition());
+            editor.putString("draft_image_path", selectedImagePath);
             editor.apply();
         }
     }

@@ -38,7 +38,7 @@ public class Activity_All_Users extends AppCompatActivity {
         adapter = new RecentUsersAdapter(this, allUsersList);
         LinearLayoutManager lm = new LinearLayoutManager(this);
         rv_AllUsers.setLayoutManager(lm);
-        binding.rvAllUsers.setAdapter(adapter);
+         rv_AllUsers.setAdapter(adapter);
 
         // زر الback
         binding.imgBack.setOnClickListener(new View.OnClickListener() {

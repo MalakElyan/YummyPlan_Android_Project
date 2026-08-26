@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.yummyplan.R;
 import com.example.yummyplan.utills.DatabaseHelper;
 import com.example.yummyplan.databinding.ActivityUserDashboardBinding;
 import com.example.yummyplan.model.Meal;
@@ -17,6 +18,8 @@ import com.example.yummyplan.model.User;
 import com.example.yummyplan.view.HealthyTipsAdapter;
 import com.example.yummyplan.view.TodayMealsAdapter;
 
+import android.graphics.Color;
+import android.content.res.ColorStateList;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,22 +45,19 @@ public class User_dashboard extends AppCompatActivity {
 
         db_helper = new DatabaseHelper(this);
 
-        // بنجيب id المستخدم من السيرد
+        // بنجيب id المستخدم من الشيرد
         SharedPreferences preferences = getSharedPreferences("UserSession", MODE_PRIVATE);
         userId = preferences.getInt("user_id", -1);
 
-        //هاد عشان اجيب تاريخ اليوم في الجهاز
+        //هاد عشان اجيب اسم اليوم الحالي في الجهاز باللغة الانجليزية و ال EEEE معناها بدي الاسم كامل Monday مش Mon
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE", Locale.ENGLISH);
+        // هاد بجيب تاريخ ووقت اللحظة ثم بطبق عليه نمط الفورمات الي فوق فبطلعلي اليوم
         currentDayName = sdf.format(new Date());
 
         // هاد ريسايكل النصايح
-        binding.rvHealthyTips.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         loadHealthyTips();
 
-        //وهاد لريسايكل وجبات اليوم
-        binding.rvTodayMeals.setLayoutManager(new LinearLayoutManager(this));
-        loadTodayData();
-
+        //هاد تشيبس الوجبات
         binding.tvChipAllRecipes.setOnClickListener(v -> filterTodayMeals("All", binding.tvChipAllRecipes));
         binding.tvBreakFast.setOnClickListener(v -> filterTodayMeals("Breakfast", binding.tvBreakFast));
         binding.tvLunch.setOnClickListener(v -> filterTodayMeals("Lunch", binding.tvLunch));
@@ -65,17 +65,31 @@ public class User_dashboard extends AppCompatActivity {
         binding.tvSnacks.setOnClickListener(v -> filterTodayMeals("Snacks", binding.tvSnacks));
         binding.tvDeserts.setOnClickListener(v -> filterTodayMeals("Desserts", binding.tvDeserts));
 
+        //هاد طريقة العرض لريسايكل الوجبات
+        LinearLayoutManager lm1 = new LinearLayoutManager(this);
+        binding.rvTodayMeals.setLayoutManager(lm1);
 
-        binding.btnMeals.setOnClickListener(v -> {
-            Intent intent = new Intent(User_dashboard.this, Meal_list.class);
-            intent.putExtra("user_role", "user");
-            startActivity(intent);
+        //هاد طريقة العرض لريسايكل النصائح
+        LinearLayoutManager lm2 = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
+        binding.rvHealthyTips.setLayoutManager(lm2);
+
+
+        binding.btnMeals.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(User_dashboard.this, Meal_list.class);
+                startActivity(intent);
+            }
         });
 
-        binding.btnProfile.setOnClickListener(v -> {
-            Intent intent = new Intent(User_dashboard.this, Profile.class);
-            startActivity(intent);
+        binding.btnProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(User_dashboard.this, Profile.class);
+                startActivity(intent);
+            }
         });
+
 
         binding.fabWeeklyMeal.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,12 +105,12 @@ public class User_dashboard extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        //هان بنجيب صورة المستخدم وبنرجب فيه
+        //هان بنجيب اسم و صورة المستخدم وبنرجب فيه
         User currentUser = db_helper.getUserById(userId);
         if (currentUser != null) {
             binding.tvWelcomeUser.setText("Hello, " + currentUser.getFullName() + "!");
             if (currentUser.getUser_img() != null) {
-                binding.imgAvtarPicture.setImageURI(Uri.parse(currentUser.getUser_img()));
+              binding.imgAvtarPicture.setImageURI(Uri.parse(currentUser.getUser_img()));
             }
         }
         //بنستدعي دالة الفلترة تبعت الشيبس
@@ -132,40 +146,37 @@ public class User_dashboard extends AppCompatActivity {
     private void loadTodayData() {
         // بنجيب كل الوجبات لليوم الحالي
         todayMealsList = db_helper.getMealsByUserAndDay(userId, currentDayName);
-        // هاد عشان لو المستخدم كان داخل لاول مرة ومش ضايف وجبات هتكون نتيجة اللست null وهيصير كراش و يسكر التطبيق
-        if (todayMealsList == null) {
-            todayMealsList = new ArrayList<>();
-        }
 
-        // بنعرضهم بشكل افتراضي (All Recipes) أول ما تفتح الشاشة
+        // بنعرضهم بشكل افتراضي All Recipes أول ما تفتح الشاشة
         filterTodayMeals("All", binding.tvChipAllRecipes);
+        //هاد الدالة الي بتجيب الاحصائيات في داشبورد المستخدم
         updateDashboardStats(todayMealsList);
     }
 
     private void filterTodayMeals(String category, TextView selectedView) {
 
         // بلون كل الأزرار بالرمادي الافتراضي
-        binding.tvChipAllRecipes.setTextColor(android.graphics.Color.parseColor("#1a1a1a"));
-        binding.tvChipAllRecipes.setBackgroundTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#D7D7D7")));
+        binding.tvChipAllRecipes.setTextColor(getColor(R.color.chip_text_default));
+        binding.tvChipAllRecipes.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.chip_bg_default)));
 
-        binding.tvBreakFast.setTextColor(android.graphics.Color.parseColor("#1a1a1a"));
-        binding.tvBreakFast.setBackgroundTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#D7D7D7")));
+        binding.tvBreakFast.setTextColor(getColor(R.color.chip_text_default));
+        binding.tvBreakFast.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.chip_bg_default)));
 
-        binding.tvLunch.setTextColor(android.graphics.Color.parseColor("#1a1a1a"));
-        binding.tvLunch.setBackgroundTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#D7D7D7")));
+        binding.tvLunch.setTextColor(getColor(R.color.chip_text_default));
+        binding.tvLunch.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.chip_bg_default)));
 
-        binding.tvDinner.setTextColor(android.graphics.Color.parseColor("#1a1a1a"));
-        binding.tvDinner.setBackgroundTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#D7D7D7")));
+        binding.tvDinner.setTextColor(getColor(R.color.chip_text_default));
+        binding.tvDinner.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.chip_bg_default)));
 
-        binding.tvSnacks.setTextColor(android.graphics.Color.parseColor("#1a1a1a"));
-        binding.tvSnacks.setBackgroundTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#D7D7D7")));
+        binding.tvSnacks.setTextColor(getColor(R.color.chip_text_default));
+        binding.tvSnacks.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.chip_bg_default)));
 
-        binding.tvDeserts.setTextColor(android.graphics.Color.parseColor("#1a1a1a"));
-        binding.tvDeserts.setBackgroundTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#D7D7D7")));
+        binding.tvDeserts.setTextColor(getColor(R.color.chip_text_default));
+        binding.tvDeserts.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.chip_bg_default)));
 
         // بلون الزر والنص الي نقرنا عليهم بالأخضر والأبيض
-        selectedView.setTextColor(android.graphics.Color.WHITE);
-        selectedView.setBackgroundTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#27ae60")));
+        selectedView.setTextColor(Color.WHITE);
+        selectedView.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#27ae60")));
 
         // لستة بنخزن فيها الوجبات المفلترة لليوم الحالي فقط
         ArrayList<Meal> filteredList = new ArrayList<>();

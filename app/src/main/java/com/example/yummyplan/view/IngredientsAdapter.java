@@ -27,7 +27,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     @Override
     public IngredientsAdapter.IngredientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // انفلاتينق للتصميم تبعي في الxml
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_ingredient, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_ingredient, parent,false);
         IngredientViewHolder holder = new IngredientViewHolder(view);
         return holder;
     }
@@ -35,9 +35,9 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     @Override
     public void onBindViewHolder(@NonNull IngredientsAdapter.IngredientViewHolder holder, int position) {
 
-        String ingredient = ingredientsList.get(position).trim();
+        String ingredients = ingredientsList.get(position).trim();
         // عرض المكونات في التشيك بوكس
-        holder.cb_ingredient_name.setText(ingredient);
+        holder.cb_ingredient_name.setText(ingredients);
         holder.cb_ingredient_name.setChecked(false);
     }
 
@@ -46,7 +46,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
         return ingredientsList.size();
     }
 
-    // هان بعمل تعريف وانفلاتينق لعناصر الريسايكل فيو الي في ال xml ً
+    // هان بعمل تعريف و نفلاتينق لعناصر الريسايكل فيو الي في ال xml
     public class IngredientViewHolder extends RecyclerView.ViewHolder {
 
         CheckBox cb_ingredient_name;
