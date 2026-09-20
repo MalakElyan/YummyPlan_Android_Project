@@ -45,11 +45,13 @@ The custom `DatabaseHelper` class extends `SQLiteOpenHelper` to handle dynamic d
 
 1. Clone the repository:
    ```
-   git clone [https://github.com/MalakElyan/YummyPlan_Android_Project.git](https://github.com/Mala02/YummyPlan_Android_Project.git)
+   git clone [https://github.com/MalakElyan/YummyPlan_Android_Project.git](https://github.com/MalakElyan/YummyPlan_Android_Project.git)
     ```
 2. Open the project in Android Studio.
 3. Wait for the Gradle Sync to complete.
 4. Run the app on an Android Emulator or physical device using Run ▶.
+
+---
 
 👩‍💻 Author & Developer
 Developer: Malak Elyan.
