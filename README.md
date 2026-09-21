@@ -72,4 +72,9 @@ Specialization: Mobile Application Development & UI/UX Design
 - 💼 **LinkedIn:** [Malak Elyan](https://www.linkedin.com/in/malak-elyan) 
 
 ---
+
+## 🔒 Copyright & Terms of Use:
+© 2026 **Malak Elyan**. All rights reserved.
+
+---
 ⭐ If you found this project useful, feel free to star it!
