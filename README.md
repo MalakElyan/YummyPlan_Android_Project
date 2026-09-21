@@ -8,7 +8,6 @@
 ![Android Studio](https://img.shields.io/badge/Android\_Studio-3DDC84?style=for-the-badge&logo=android-studio&logoColor=white) 
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
 
----
 
 **YummyPlan** is a fully-featured Android application designed for meal management and weekly diet planning. Built with **Java** in **Android Studio**, it utilizes an **SQLite** database for efficient, fast local data storage and seamless performance.
 
