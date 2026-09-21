@@ -64,6 +64,7 @@ The custom `DatabaseHelper` class extends `SQLiteOpenHelper` to handle dynamic d
 
 👩‍💻 Author & Developer
 Developer: Malak Elyan.
+Specialization: Mobile Application Development & UI/UX Design
 
 ---
 ## 🔗 Connect with Me
@@ -72,6 +73,3 @@ Developer: Malak Elyan.
 
 ---
 ⭐ If you found this project useful, feel free to star it!
-
-
-Specialization: Mobile Application Development & UI/UX Design
